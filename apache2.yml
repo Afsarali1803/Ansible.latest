@@ -1,0 +1,6 @@
+---
+- name: Install httpd using apt
+  hosts: webapp
+  become: yes
+  roles: 
+    - httpd

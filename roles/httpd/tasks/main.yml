@@ -1,0 +1,38 @@
+---
+- name: Update apt package index 
+  apt: 
+    update_cache: yes
+
+- name: Uninstall packages
+  apt:
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - apache2
+    - firewalld
+
+- name: Ensure Apache and Firewalld services are stopped
+  systemd:
+    name: "{{ item }}"
+    state: stopped
+  loop:
+    - apache2
+  ignore_errors: yes
+
+
+- name: Install Apache HTTP Server
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - apache2
+    - firewalld
+
+- name: Start and enable Apache HTTP Server
+  systemd:
+      name: "{{ item }}"
+      state: started
+      enabled: yes
+  loop:
+    - apache2
+    - firewalld
